@@ -430,7 +430,8 @@ go_tool_names += $1
 $$(DOWNLOAD_DIR)/tools/$1@$($(call uc,$1)_VERSION)_$(HOST_OS)_$(HOST_ARCH): | $$(NEEDS_GO) $$(DOWNLOAD_DIR)/tools
 	@source $$(lock_script) $$@; \
 		mkdir -p $$(outfile).dir; \
-		GOWORK=off GOBIN=$$(outfile).dir $$(GO) install --tags "$(strip $(go_tags_$1))" $2@$($(call uc,$1)_VERSION); \
+		_GO_VERSION=$$($$(GO) version | awk '{print $$3}'); \
+		GOWORK=off GOBIN=$$(outfile).dir $$(GO) install --tags "$(strip $(go_tags_$1))" $2@$($(call uc,$1)_VERSION)@go$(_GO_VERSION); \
 		mv $$(outfile).dir/$1 $$(outfile); \
 		rm -rf $$(outfile).dir
 endef
